@@ -11,7 +11,7 @@ class LedPinLevelStore with ChangeNotifier {
 
   void changePinLevel ({int cathodeNumber, int anodeNumber, bool anodeLevel}) {
     ledLevels[cathodeNumber][anodeNumber] = anodeLevel;
-    print(ledLevels[cathodeNumber][anodeNumber]);
+    
     notifyListeners();
   }
 }
@@ -50,20 +50,42 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("LED Level"),
-              Text("上段"),
-              LedCheckBoxesContainer(),
-              Divider(),
-              Text("中段"),
-              LedCheckBoxesContainer(),
-              Divider(),
-              Text("下段"),
-              LedCheckBoxesContainer()
-            ],
+          child: SingleChildScrollView(
+            child: 
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(100),
+                    child: Column(
+                      children: [
+                        Text(
+                          "LED Level",
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        Text("上段"),
+                        LedCheckBoxesContainer(0),
+                        Divider(),
+                        Text("中段"),
+                        LedCheckBoxesContainer(1),
+                        Divider(),
+                        Text("下段"),
+                        LedCheckBoxesContainer(2),
+                      ],
+                    )),
+                  Padding(
+                    padding: EdgeInsets.all(100),
+                    child: Column(
+                      children:[
+                        Text(
+                          'Exported Code',
+                          style: Theme.of(context).textTheme.headline5,)
+                      ]
+                    ),
+                  )
+                ],
+              ),
           ),
         )
     );
@@ -72,13 +94,13 @@ class _HomePageState extends State<HomePage> {
 
 
 class LedCheckBoxesContainer extends StatefulWidget {
+  int cathodeNumber;
+  LedCheckBoxesContainer(this.cathodeNumber) : assert(cathodeNumber != null);
   @override
   _LedCheckBoxesContainerState createState() => _LedCheckBoxesContainerState();
 }
 
 class _LedCheckBoxesContainerState extends State<LedCheckBoxesContainer> {
-  List<List<int>> leddata = List<List<int>>();
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -92,32 +114,31 @@ class _LedCheckBoxesContainerState extends State<LedCheckBoxesContainer> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 3,
             itemBuilder: (BuildContext context, int index) {
-              print(index);
               index = index * 3;
               return Row(
                 children: [
                   Checkbox(
-                    value: context.select((LedPinLevelStore store) => store.ledLevels[0][index]),
+                    value: context.select((LedPinLevelStore store) => store.ledLevels[widget.cathodeNumber][index]),
                     activeColor: Colors.red,
                     onChanged: (f) {
                       context.read<LedPinLevelStore>()
-                      .changePinLevel(cathodeNumber: 0, anodeNumber: index, anodeLevel: f);
+                      .changePinLevel(cathodeNumber: widget.cathodeNumber, anodeNumber: index, anodeLevel: f);
                     },
                   ),
                   Checkbox(
-                    value: context.select((LedPinLevelStore store) => store.ledLevels[0][index + 1]),
+                    value: context.select((LedPinLevelStore store) => store.ledLevels[widget.cathodeNumber][index + 1]),
                     activeColor: Colors.red,
                     onChanged: (f) {
                       context.read<LedPinLevelStore>()
-                      .changePinLevel(cathodeNumber: 0, anodeNumber: index + 1, anodeLevel: f);
+                      .changePinLevel(cathodeNumber: widget.cathodeNumber, anodeNumber: index + 1, anodeLevel: f);
                     },
                   ),
                   Checkbox(
-                    value: context.select((LedPinLevelStore store) => store.ledLevels[0][index + 2]),
+                    value: context.select((LedPinLevelStore store) => store.ledLevels[widget.cathodeNumber][index + 2]),
                     activeColor: Colors.red,
                     onChanged: (f) {
                       context.read<LedPinLevelStore>()
-                      .changePinLevel(cathodeNumber: 0, anodeNumber: index + 2, anodeLevel: f);
+                      .changePinLevel(cathodeNumber: widget.cathodeNumber, anodeNumber: index + 2, anodeLevel: f);
                     },
                   )
                 ],
