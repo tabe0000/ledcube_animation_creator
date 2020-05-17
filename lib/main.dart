@@ -81,9 +81,9 @@ class _LedCheckBoxesContainerState extends State<LedCheckBoxesContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return LimitedBox(
-      maxWidth: 200,
-      maxHeight: 200,
+    return SizedBox(
+      width: 120,
+      height: 120,
       child: Wrap(
         direction: Axis.horizontal,
         children: [
