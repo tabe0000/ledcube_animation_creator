@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:clippy/browser.dart' as clippy;
 
 class LedPinLevelStore with ChangeNotifier {
   List<List<bool>> ledLevels = [
@@ -11,7 +12,24 @@ class LedPinLevelStore with ChangeNotifier {
 
   void changePinLevel ({int cathodeNumber, int anodeNumber, bool anodeLevel}) {
     ledLevels[cathodeNumber][anodeNumber] = anodeLevel;
-    
+    notifyListeners();
+  }
+
+  void allLevelLow() {
+    for(int i = 0; i < ledLevels.length; i++) {
+      for (int j = 0; j < ledLevels[i].length; j++) {
+        ledLevels[i][j] = false;
+      }
+    }
+    notifyListeners();
+  }
+
+  void allLevelHigh() {
+    for(int i = 0; i < ledLevels.length; i++) {
+      for (int j = 0; j < ledLevels[i].length; j++) {
+        ledLevels[i][j] = true; 
+      }
+    }
     notifyListeners();
   }
 }
@@ -64,6 +82,7 @@ class _HomePageState extends State<HomePage> {
                           "LED Level",
                           style: Theme.of(context).textTheme.headline4,
                         ),
+                        SizedBox(height: 20,),
                         Text("上段"),
                         LedCheckBoxesContainer(0),
                         Divider(),
@@ -72,6 +91,22 @@ class _HomePageState extends State<HomePage> {
                         Divider(),
                         Text("下段"),
                         LedCheckBoxesContainer(2),
+                        Divider(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                              child: Text('all high'),
+                              onPressed: () => context.read<LedPinLevelStore>().allLevelHigh(),
+                            ),
+                            SizedBox(width: 20,),
+                            RaisedButton(
+                              child: Text('all low'),
+                              onPressed: () => context.read<LedPinLevelStore>().allLevelLow()
+                            )
+                          ]
+                        )
                       ],
                     )),
                   Padding(
@@ -80,7 +115,19 @@ class _HomePageState extends State<HomePage> {
                       children:[
                         Text(
                           'Exported Code',
-                          style: Theme.of(context).textTheme.headline5,)
+                          style: Theme.of(context).textTheme.headline4),
+                        Divider(),
+                        RaisedButton(
+                          onPressed: () async {
+                            print("clicked");
+                            await clippy.write('copied clip');
+                          },
+                          child: Text("Copy!!!!"),
+                        ),
+                        SizedBox(height: 20,),
+                        SelectableText(
+                          "慶応3年1月5日（新暦2月9日）江戸牛込馬場下横町に生まれる。本名は夏目金之助。帝国大学文科大学（東京大学文学部）を卒業後、東京高等師範学校、松山中学、第五高等学校などの教師生活を経て、1900年イギリスに留学する。帰国後、第一高等学校で教鞭をとりながら、1905年処女作「吾輩は猫である」を発表。1906年「坊っちゃん」「草枕」を発表。1907年教職を辞し、朝日新聞社に入社。そして「虞美人草」「三四郎」などを発表するが、胃病に苦しむようになる。1916年12月9日、「明暗」の連載途中に胃潰瘍で永眠。享年50歳であった。"
+                        ),
                       ]
                     ),
                   )
