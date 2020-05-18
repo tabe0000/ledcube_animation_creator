@@ -1,9 +1,13 @@
+import 'package:cube_animation_creator/about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:clippy/browser.dart' as clippy;
+import 'nav_drawer.dart';
 
 class LedPinLevelStore with ChangeNotifier {
+  int oneSideLed = 3;
+
   List<List<bool>> ledLevels = [
     List.generate(9, (index) => false),
     List.generate(9, (index) => false),
@@ -62,7 +66,11 @@ class MyApp extends StatelessWidget {
       home: ChangeNotifierProvider(
         create: (context) => LedPinLevelStore(),
         child: HomePage()
-      )
+      ),
+      routes: <String, WidgetBuilder> {
+        '/home': (BuildContext context) => HomePage(),
+        '/about': (BuildContext context) => AboutPage()
+      },
     ); 
   }
 }
@@ -77,6 +85,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
         title: Text("Led Pattern Code Generator"),
       ),

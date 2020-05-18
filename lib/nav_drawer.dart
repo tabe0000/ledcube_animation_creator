@@ -1,4 +1,6 @@
+import 'package:cube_animation_creator/main.dart';
 import 'package:flutter/material.dart';
+import 'about.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -9,29 +11,33 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             child: Text(
-              'Side menu',
+              'Led Code Generator',
               style: TextStyle(color: Colors.white, fontSize: 25),
             ),
             decoration: BoxDecoration(
                 color: Colors.green,
                 image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/cover.jpg'))),
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/led.png'))),
           ),
           ListTile(
-            leading: Icon(Icons.input),
+            leading: Icon(Icons.home),
             title: Text('Home'),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.of(context).popAndPushNamed('/')
+            },
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
             title: Text('About'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+              Navigator.of(context).pushNamed('/about')
+            },
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
+            leading: Icon(Icons.local_convenience_store),
             title: Text('License'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => showLicensePage(context: context),
           ),
         ],
       ),
