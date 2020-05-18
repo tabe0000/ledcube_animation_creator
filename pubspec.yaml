@@ -1,5 +1,5 @@
 name: cube_animation_creator
-description: A new Flutter project.
+description: generate led cube animator
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -27,6 +27,8 @@ dependencies:
   clippy:
   url_launcher: ^5.1.4
   url_launcher_web: ^0.1.0
+  flutter_launcher_icons:
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -35,6 +37,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
