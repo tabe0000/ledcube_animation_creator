@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher_web/url_launcher_web.dart';
 import 'dart:js' as js;
 import 'nav_drawer.dart';
 
