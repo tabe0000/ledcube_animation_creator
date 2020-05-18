@@ -10,8 +10,15 @@ class LedPinLevelStore with ChangeNotifier {
     List.generate(9, (index) => false)
   ];
 
+  String exportedCode = "[[false, false, false, false, false, false, false, false, false], [false, false, false, false, false, false, false, false, false], [false, false, false, false, false, false, false, false, false]]";
+
+  void generateCode() {
+    exportedCode = ledLevels.toString();
+  }
+
   void changePinLevel ({int cathodeNumber, int anodeNumber, bool anodeLevel}) {
     ledLevels[cathodeNumber][anodeNumber] = anodeLevel;
+    generateCode();
     notifyListeners();
   }
 
@@ -21,6 +28,7 @@ class LedPinLevelStore with ChangeNotifier {
         ledLevels[i][j] = false;
       }
     }
+    generateCode();
     notifyListeners();
   }
 
@@ -30,6 +38,7 @@ class LedPinLevelStore with ChangeNotifier {
         ledLevels[i][j] = true; 
       }
     }
+    generateCode();
     notifyListeners();
   }
 }
@@ -44,11 +53,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Led Pattern Code Generator',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider(
         create: (context) => LedPinLevelStore(),
         child: HomePage()
@@ -67,6 +77,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Led Pattern Code Generator"),
+      ),
       body: Center(
           child: SingleChildScrollView(
             child: 
@@ -119,14 +132,13 @@ class _HomePageState extends State<HomePage> {
                         Divider(),
                         RaisedButton(
                           onPressed: () async {
-                            print("clicked");
-                            await clippy.write('copied clip');
+                            await clippy.write(context.read<LedPinLevelStore>().exportedCode);
                           },
                           child: Text("Copy!!!!"),
                         ),
                         SizedBox(height: 20,),
                         SelectableText(
-                          "慶応3年1月5日（新暦2月9日）江戸牛込馬場下横町に生まれる。本名は夏目金之助。帝国大学文科大学（東京大学文学部）を卒業後、東京高等師範学校、松山中学、第五高等学校などの教師生活を経て、1900年イギリスに留学する。帰国後、第一高等学校で教鞭をとりながら、1905年処女作「吾輩は猫である」を発表。1906年「坊っちゃん」「草枕」を発表。1907年教職を辞し、朝日新聞社に入社。そして「虞美人草」「三四郎」などを発表するが、胃病に苦しむようになる。1916年12月9日、「明暗」の連載途中に胃潰瘍で永眠。享年50歳であった。"
+                          context.select((LedPinLevelStore store) => store.exportedCode)
                         ),
                       ]
                     ),
